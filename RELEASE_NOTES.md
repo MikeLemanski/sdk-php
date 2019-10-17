@@ -1,23 +1,17 @@
 # Release 2.0.0
-- Removes backwards compatibility with the old Token Request flow.
-> A TokenRequestBuilder can no longer be constructed directly from a TokenPayload.
->Please set fields using the setters in `TokenRequestBuilder.php`. 
+The following new features/enhancements, changes, and fixes are included this release:
+- Backward compatibility support for the outmoded Token Request flow has been discontinued. As a result:
+  - **TokenRequestBuilder** can no longer be constructed directly from a **TokenPayload**. You must now set fields using the setters in `TokenRequestBuilder.php`. 
+  - The `addOption` and `addAllOptions` methods have been removed. You must now use the `TokenRequestBuilder.php` setters for **bank ID**, **source account ID**, **from/to member**, and so forth.
+- The `resolveAlias` method now returns a `TokenMember` object containing **member ID**
+and the full alias with the appropriate type. It returns **null** if the alias does't exist. 
+  >For example, `if (resolveAlias(alias)) { ... }` might be rewritten as  `if (!is_null(resolveAlias(alias))) { ... }`.
+- Standing orders and scheduled payments are now supported.
+  - Indicate execution of a transfer on a specific future date by using the `setExecutionDate` method in `TransferTokenRequestBuilder.php`. 
+  - Construct a token request for a standing order with `StandingOrderTokenRequestBuilder.php`.
+- The **build_proto.rb** script now recursively searches through subdirectories for proto files.  
 
->The `addOption` and `addAllOptions` methods have been removed. Please use the
->setters for bank ID, source account ID, 'from' member, etc.
 
-- Changes the `resolveAlias` method to return a `TokenMember` object containing member ID
-and the full alias with the appropriate type, or null if the alias does not exist.
-> For example, `if (resolveAlias(alias)) { ... }` might be rewritten as
->`if (!is_null(resolveAlias(alias))) { ... }`.
-
-- Adds support for standing orders and scheduled payments.
->To indicate that a transfer should be executed on a specific future date, use the
->`setExecutionDate` method in `TransferTokenRequestBuilder.php`. To construct a
->token request for a standing order, use `StandingOrderTokenRequestBuilder.php`.
-
-- Changes the build_proto.rb script to recursively search through subdirectories for proto files.
- 
 # Release 1.0.0 (since 1.0.0-beta-3)
 - Introduces new Token Request flow. `TokenRequest` consists of `TokenRequestPayload` 
 (immutable fields) and `TokenRequestOptions` (mutable fields). It should no longer contain 
